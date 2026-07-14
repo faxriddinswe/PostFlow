@@ -1,8 +1,7 @@
-Bu yerda har bir endpoint'ni to'g'ridan-to'g'ri brauzerdan sinab ko'rish mumkin.
-
----
 
 ## 📖 Foydalanish qo'llanmasi
+
+Sayt manzili: https://postflow-6brl.onrender.com/
 
 ### 1. Ro'yxatdan o'tish
 
