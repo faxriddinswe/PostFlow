@@ -107,7 +107,7 @@ Konvertatsiya `main.py` ichidagi `markdown_to_telegram_html()` funksiyasida rege
 
 ## 👤 Muallif
 
-**Faxriddin** — Backend Engineering yo'nalishida o'zini rivojlantirayotgan dasturchi.
+**Faxriddin Baxtiyorov** — Backend Engineering yo'nalishida o'zini rivojlantirayotgan dasturchi.
 
 Ushbu loyiha — FastAPI, autentifikatsiya, database dizayni va xavfsizlik tamoyillarini amaliyotda chuqur o'rganish maqsadida, nol darajadan qadamma-qadam qurilgan.
 
