@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yxatdan o'tish — PostFlow</title>
+    <script src="/static/theme.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body class="hero-page">
+
+    <div class="hero-nav">
+        <div class="logo-text">📮 PostFlow</div>
+        <a href="/founder-page"></a>
+    </div>
+
+    <div style="display:flex; flex-direction:column; align-items:center;">
+        <div class="hero-headline">
+            <h3>Ro'yxatdan o'ting va Telegram kanalingizni bir necha soniyada ulang.</h3>
+        </div>
+
+        <div class="auth-wrapper">
+            <div class="auth-card glass">
+                <h1>📝 Ro'yxatdan o'tish</h1>
+
+                <label>Ism va familiya</label>
+                <input type="text" id="name" placeholder="Faxriddin">
+
+                <label>Email</label>
+                <input type="email" id="email" placeholder="sen@example.com">
+
+                <label>Username</label>
+                <input type="text" id="username" placeholder="faxriddin">
+
+                <label>Parol</label>
+                <input type="password" id="password" placeholder="Kamida 8 belgi">
+
+                <button id="registerBtn">Ro'yxatdan o'tish</button>
+                <div class="status" id="status"></div>
+
+                <div class="link-row">Akkountingiz bormi? <a href="/login-page">Kirish</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById("registerBtn");
+        const status = document.getElementById("status");
+
+        btn.addEventListener("click", async () => {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            btn.disabled = true;
+            status.className = "status";
+            status.textContent = "Yuborilmoqda...";
+
+            try {
+                const resp = await fetch("/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, username, password }),
+                });
+                const data = await resp.json();
+
+                if (resp.ok) {
+                    status.className = "status success";
+                    status.textContent = "✅ " + data.message + " Endi login qiling.";
+                    setTimeout(() => { window.location.href = "/login-page"; }, 1500);
+                } else {
+                    status.className = "status error";
+                    status.textContent = "❌ " + data.detail;
+                }
+            } catch (err) {
+                status.className = "status error";
+                status.textContent = "❌ Server bilan aloqa yo'q: " + err;
+            }
+
+            btn.disabled = false;
+        });
+    </script>
+</body>
+
+</html>

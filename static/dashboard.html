@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — PostFlow</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/dashboard" class="logo"><span class="logo-icon">📮</span>PostFlow</a>
+        <nav>
+            <a href="/dashboard" class="active">📊 Dashboard</a>
+            <a href="/profile-page">👤 Profil</a>
+            <a href="/founder-page">✍️ Asoschi</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="logout-btn-nav" id="logoutBtn">Chiqish</button>
+        </div>
+    </header>
+
+    <div class="page-content">
+        <h1 class="page-title">Dashboard</h1>
+
+        <div class="card">
+            <div class="card-title"><span class="step-badge">1</span> Telegram kanal ulash</div>
+            <div class="card-desc">
+                Avval ushbu botni (<b>@faxriddin_postbot</b>) telegram kanalingizga <b>admin</b> qilib qo'shing, keyin
+                kanalingiz
+                username'ini kiriting. Istagancha kanal ulashingiz mumkin.
+            </div>
+            <input type="text" id="channelInput" placeholder="@mening_kanalim">
+            <button id="connectBtn">Kanalni ulash</button>
+            <div class="status" id="channelStatus"></div>
+
+            <div id="channelListWrap" style="margin-top:22px; display:none;">
+                <label style="margin-top:0;">Ulangan kanallaringiz</label>
+                <div id="channelList"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span class="step-badge">2</span> Post yozish</div>
+
+            <label>Qaysi kanalga yuborilsin?</label>
+            <select id="channelSelect"></select>
+
+            <div class="editor-toolbar">
+                <button type="button" class="tool-btn" onclick="wrapSelection('**','**')"
+                    title="Qalin"><b>B</b></button>
+                <button type="button" class="tool-btn" onclick="wrapSelection('*','*')" title="Qiya"><i>I</i></button>
+                <button type="button" class="tool-btn" onclick="wrapSelection('`','`')" title="Kod">{ }</button>
+                <button type="button" class="tool-btn" onclick="wrapSelection('```','```')" title="Kod bloki">{ ;;;
+                    }</button>
+                <button type="button" class="tool-btn" onclick="insertQuote()" title="Iqtibos">❝ ❞</button>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+                **qalin**, *qiya*, `kod`, ```kod bloki```, &gt; iqtibos
+            </div>
+            <br>
+            <textarea id="editor" placeholder="Postingizni shu yerga yozing..."></textarea>
+            <button id="publishBtn">Publish 🚀</button>
+            <div class="status" id="publishStatus"></div>
+        </div>
+    </div>
+
+
+    <footer class="site-footer">
+        © 2026 PostFlow. Barcha huquqlar himoyalangan. Yaratuvchi: <a href="/founder-page">Faxriddin</a>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) window.location.href = "/login-page";
+
+        const authHeaders = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token,
+        };
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "/login-page";
+        });
+
+        // ---- Toolbar funksiyalari ----
+        function wrapSelection(before, after) {
+            const textarea = document.getElementById("editor");
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selected = textarea.value.substring(start, end);
+
+            textarea.value =
+                textarea.value.substring(0, start) +
+                before + selected + after +
+                textarea.value.substring(end);
+
+            textarea.focus();
+            textarea.selectionStart = start + before.length;
+            textarea.selectionEnd = start + before.length + selected.length;
+        }
+
+        function insertQuote() {
+            const textarea = document.getElementById("editor");
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selected = textarea.value.substring(start, end) || "iqtibos matni";
+
+            textarea.value =
+                textarea.value.substring(0, start) +
+                "> " + selected +
+                textarea.value.substring(end);
+
+            textarea.focus();
+        }
+
+        // ---- Kanallar ro'yxatini yuklash va ekranga chiqarish ----
+        async function loadChannels() {
+            try {
+                const resp = await fetch("/channels", {
+                    headers: { "Authorization": "Bearer " + token },
+                });
+
+                if (resp.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login-page";
+                    return;
+                }
+
+                const channels = await resp.json();
+
+                // Dropdown'ni to'ldiramiz
+                const select = document.getElementById("channelSelect");
+                select.innerHTML = "";
+
+                if (channels.length === 0) {
+                    select.innerHTML = `<option value="">Avval kanal ulang</option>`;
+                } else {
+                    channels.forEach((c) => {
+                        const opt = document.createElement("option");
+                        opt.value = c.id;
+                        opt.textContent = c.channel_username;
+                        select.appendChild(opt);
+                    });
+                }
+
+                // Ulangan kanallar ro'yxatini, har birining yonida o'chirish tugmasi bilan ko'rsatamiz
+                const wrap = document.getElementById("channelListWrap");
+                const list = document.getElementById("channelList");
+
+                if (channels.length > 0) {
+                    wrap.style.display = "block";
+                    list.innerHTML = channels
+                        .map((c) => `
+          <div class="channel-row">
+            <span>✅ ${c.channel_username}</span>
+            <button type="button" class="delete-channel-btn" onclick="deleteChannel(${c.id})">✕</button>
+          </div>
+        `)
+                        .join("");
+                } else {
+                    wrap.style.display = "none";
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Kanalni o'chirish
+        async function deleteChannel(channelId) {
+            const confirmed = confirm("Bu kanalni o'chirmoqchimisiz? Bu amalni orqaga qaytarib bo'lmaydi.");
+            if (!confirmed) return;
+
+            try {
+                const resp = await fetch(`/channels/${channelId}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                });
+
+                if (resp.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login-page";
+                    return;
+                }
+
+                if (resp.ok) {
+                    loadChannels(); // ro'yxatni yangilaymiz
+                } else {
+                    const data = await resp.json();
+                    alert("Xato: " + data.detail);
+                }
+            } catch (err) {
+                alert("Xato: " + err);
+            }
+        }
+
+        // ---- Kanal ulash ----
+        const connectBtn = document.getElementById("connectBtn");
+        const channelStatus = document.getElementById("channelStatus");
+
+        connectBtn.addEventListener("click", async () => {
+            const channel_username = document.getElementById("channelInput").value;
+            connectBtn.disabled = true;
+            channelStatus.className = "status";
+            channelStatus.textContent = "Tekshirilmoqda...";
+
+            try {
+                const resp = await fetch("/channels/connect", {
+                    method: "POST",
+                    headers: authHeaders,
+                    body: JSON.stringify({ channel_username }),
+                });
+                const data = await resp.json();
+
+                if (resp.ok) {
+                    channelStatus.className = "status success";
+                    channelStatus.textContent = "✅ " + data.message;
+                    document.getElementById("channelInput").value = "";
+                    loadChannels(); // ro'yxatni va dropdown'ni yangilaymiz
+                } else if (resp.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login-page";
+                } else {
+                    channelStatus.className = "status error";
+                    channelStatus.textContent = "❌ " + data.detail;
+                }
+            } catch (err) {
+                channelStatus.className = "status error";
+                channelStatus.textContent = "❌ Xato: " + err;
+            }
+
+            connectBtn.disabled = false;
+        });
+
+        // ---- Publish ----
+        const publishBtn = document.getElementById("publishBtn");
+        const editor = document.getElementById("editor");
+        const publishStatus = document.getElementById("publishStatus");
+
+        publishBtn.addEventListener("click", async () => {
+            const channel_id = document.getElementById("channelSelect").value;
+
+            if (!channel_id) {
+                publishStatus.className = "status error";
+                publishStatus.textContent = "❌ Avval kanal tanlang yoki ulang";
+                return;
+            }
+
+            publishBtn.disabled = true;
+            publishStatus.className = "status";
+            publishStatus.textContent = "Yuborilmoqda...";
+
+            try {
+                const resp = await fetch("/publish", {
+                    method: "POST",
+                    headers: authHeaders,
+                    body: JSON.stringify({ text: editor.value, channel_id: parseInt(channel_id) }),
+                });
+                const data = await resp.json();
+
+                if (resp.ok) {
+                    publishStatus.className = "status success";
+                    publishStatus.textContent = "✅ " + data.message;
+                    editor.value = "";
+                } else if (resp.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login-page";
+                } else {
+                    publishStatus.className = "status error";
+                    publishStatus.textContent = "❌ " + data.detail;
+                }
+            } catch (err) {
+                publishStatus.className = "status error";
+                publishStatus.textContent = "❌ Xato: " + err;
+            }
+
+            publishBtn.disabled = false;
+        });
+
+        // ---- MUHIM: sahifa ochilganda kanallar ro'yxatini darhol yuklaymiz ----
+        loadChannels();
+    </script>
+</body>
+
+</html>

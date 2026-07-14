@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil — PostFlow</title>
+    <script src="/static/theme.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/dashboard" class="logo"><span class="logo-icon">📮</span>PostFlow</a>
+        <nav>
+            <a href="/dashboard" class="active">📊 Dashboard</a>
+            <a href="/profile-page">👤 Profil</a>
+            <a href="/founder-page">✍️ Asoschi</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="logout-btn-nav" id="logoutBtn">Chiqish</button>
+        </div>
+    </header>
+
+    <div class="page-content">
+        <h1 class="page-title">Profil</h1>
+
+        <div class="card">
+            <div class="profile-header">
+                <div class="avatar-circle" id="avatarLetter">?</div>
+                <div>
+                    <h2 id="profileName">Yuklanmoqda...</h2>
+                    <div class="muted" id="profileUsername"></div>
+                    <div class="muted" id="profileSince"></div>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="num" id="totalPosts">0</div>
+                    <div class="label">Jami postlar</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="activeDays">0</div>
+                    <div class="label">Faol kunlar</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📅 Faollik tarixi</div>
+            <div class="activity-scroll">
+                <div class="activity-grid" id="activityGrid"></div>
+            </div>
+            <div class="activity-legend">
+                Kam
+                <div class="activity-cell"></div>
+                <div class="activity-cell" data-level="1"></div>
+                <div class="activity-cell" data-level="2"></div>
+                <div class="activity-cell" data-level="3"></div>
+                <div class="activity-cell" data-level="4"></div>
+                Ko'p
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        © 2026 PostFlow. Barcha huquqlar himoyalangan. Yaratuvchi: <a href="/founder-page">Faxriddin</a>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) window.location.href = "/login-page";
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "/login-page";
+        });
+
+        function levelFor(count) {
+            if (count === 0) return 0;
+            if (count < 3) return 1;
+            if (count < 6) return 2;
+            if (count < 10) return 3;
+            return 4;
+        }
+
+        function buildActivityGrid(activity) {
+            const container = document.getElementById("activityGrid");
+            container.innerHTML = "";
+
+            const totalDays = 371;
+            const today = new Date();
+            let start = new Date(today);
+            start.setDate(start.getDate() - (totalDays - 1));
+            start.setDate(start.getDate() - start.getDay());
+
+            let current = new Date(start);
+            while (current <= today) {
+                const key = current.toISOString().slice(0, 10);
+                const count = activity[key] || 0;
+
+                const cell = document.createElement("div");
+                cell.className = "activity-cell";
+                cell.dataset.level = levelFor(count);
+                cell.title = `${key}: ${count} ta post`;
+
+                container.appendChild(cell);
+                current.setDate(current.getDate() + 1);
+            }
+        }
+
+        async function loadProfile() {
+            try {
+                const resp = await fetch("/profile/data", {
+                    headers: { "Authorization": "Bearer " + token },
+                });
+
+                if (resp.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login-page";
+                    return;
+                }
+
+                const data = await resp.json();
+
+                document.getElementById("profileName").textContent = data.name;
+                document.getElementById("profileUsername").textContent = "@" + data.username;
+                document.getElementById("profileSince").textContent = "A'zo bo'lgan sana: " + data.member_since;
+                document.getElementById("avatarLetter").textContent = data.name.charAt(0).toUpperCase();
+                document.getElementById("totalPosts").textContent = data.total_posts;
+                document.getElementById("activeDays").textContent = data.active_days;
+
+                buildActivityGrid(data.activity);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

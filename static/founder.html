@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asoschi — PostFlow</title>
+    <script src="/static/theme.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/dashboard" class="logo"><span class="">📮</span>PostFlow</a>
+        <nav>
+            <a href="/dashboard" class="active">📊 Dashboard</a>
+            <a href="/profile-page">👤 Profil</a>
+            <a href="/founder-page">✍️ Asoschi</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="logout-btn-nav" id="logoutBtn">Chiqish</button>
+        </div>
+    </header>
+
+    <div class="founder-terminal">
+        <img src="/static/avatar.jpg" alt="Faxriddin" class="founder-avatar">
+
+        <h1>Hey, I'm Faxriddin.</h1>
+
+        <p>Backend Engineering student building production-grade systems in Python and FastAPI.</p>
+        <p>I write about what I learn and keep my projects here.</p>
+
+        <div class="founder-links">
+            <a href="https://www.faxriddinswe.uz/building.html">See what I'm building →</a>
+            <a href="https://www.faxriddinswe.uz/" target="_blank">My blog →</a>
+        </div>
+
+        <hr class="founder-divider">
+
+        <div class="find-me-label">Find me on</div>
+        <div class="social-row">
+            <a href="https://t.me/faxriddinswe" target="_blank"> Telegram</a>
+            <a href="https://linkedin.com/in/faxriddinswe" target="_blank"></span> LinkedIn</a>
+            <a href="https://leetcode.com/faxriddinswe" target="_blank"></span> LeetCode</a>
+            <a href="https://medium.com/@faxriddinswe" target="_blank">
+                </span> Medium
+            </a>
+            <a href="https://x.com/faxriddinswe" target="_blank">
+                </span> Twitter
+            </a>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <footer class="site-footer">
+        © 2026 PostFlow. Barcha huquqlar himoyalangan. Yaratuvchi: <a href="/founder-page">Faxriddin Baxtiyorov</a>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) window.location.href = "/login-page";
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "/login-page";
+        });
+    </script>
+</body>
+
+</html>
