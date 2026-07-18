@@ -3,6 +3,157 @@
 
 Sayt manzili: https://postflow-faxriddinswe-3378.up.railway.app/login-page
 
+
+Loyihani o'z kompyuteringizga yuklab olish:
+
+```bash
+git clone https://github.com/faxriddinswe/PostFlow.git
+cd PostFlow
+```
+
+### Virtual muhit (venv) yaratish
+
+**Linux / macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+**Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Terminalda `(venv)` yozuvi ko'rinsa — muvaffaqiyatli faollashgan.
+
+---
+
+## 📦 Kutubxonalarni o'rnatish
+
+Loyihada barcha kerakli kutubxonalar `requirements.txt` faylida ro'yxatlangan. Bittasi bilan hammasini o'rnatish mumkin:
+
+```bash
+pip install -r requirements.txt
+```
+
+Agar `requirements.txt` bo'lmasa yoki qo'lda o'rnatmoqchi bo'lsangiz:
+
+```bash
+pip install fastapi uvicorn httpx python-dotenv sqlalchemy bcrypt python-jose "pydantic[email]" psycopg2-binary
+```
+
+Har bir kutubxona nima uchun kerakligi:
+
+| Kutubxona | Vazifasi |
+|---|---|
+| `fastapi` | Backend framework — REST API |
+| `uvicorn` | ASGI server — FastAPI'ni ishga tushiradi |
+| `httpx` | Telegram Bot API bilan asinxron aloqa |
+| `python-dotenv` | `.env` fayldan maxfiy sozlamalarni o'qish |
+| `sqlalchemy` | ORM — database bilan Python orqali ishlash |
+| `bcrypt` | Parollarni xavfsiz hash qilish |
+| `python-jose` | JWT token yaratish/tekshirish |
+| `pydantic[email]` | Kiruvchi ma'lumotni validatsiya qilish |
+| `psycopg2-binary` | PostgreSQL bilan ulanish uchun drayver |
+
+---
+
+## 🤖 Telegram bot yaratish
+
+1. Telegram'da **@BotFather**ni toping, `/start` bosing.
+2. `/newbot` buyrug'ini yuboring, ism va username belgilang (username `bot` bilan tugashi shart).
+3. BotFather sizga **API token** beradi — buni saqlab qo'ying.
+4. Botingizni o'z Telegram kanalingizga **admin** qilib qo'shing (Kanal → Administrators → Add Admin → botni tanlang → "Post Messages" ruxsatini yoqing).
+
+---
+
+## 🔑 `.env` faylini sozlash
+
+Loyiha papkasida `.env` nomli fayl yarating (boshida nuqta bilan):
+
+```env
+BOT_TOKEN=sizning_bot_tokeningiz
+SECRET_KEY=juda_uzun_tasodifiy_maxfiy_kalit
+```
+
+`SECRET_KEY`ni tasodifiy generatsiya qilish:
+
+```bash
+python3 -c "import secrets; print(secrets.token_hex(32))"
+```
+
+> ⚠️ `.env` fayli hech qachon Git'ga yuklanmasligi kerak — u `.gitignore`da bo'lishi shart (loyihada allaqachon sozlangan).
+
+**Eslatma:** lokal ishga tushirishda `DATABASE_URL` kerak emas — loyiha standart holda `sqlite:///./app.db` ishlatadi. Bu faqat production (Railway/Render)da PostgreSQL uchun kerak bo'ladi.
+
+---
+
+## 🚀 Lokal ishga tushirish
+
+```bash
+uvicorn main:app --reload
+```
+
+Brauzerda oching:
+http://127.0.0.1:8000
+
+API dokumentatsiyasi (Swagger):
+http://127.0.0.1:8000/docs
+
+---
+
+## ☁️ Production'ga deploy qilish (Railway)
+
+1. [railway.com](https://railway.com) da GitHub orqali ro'yxatdan o'ting.
+2. **New Project** → **Deploy from GitHub repo** → repositoriyangizni tanlang.
+3. Service **Settings** → **Deploy** bo'limida Start Command'ni kiriting:
+```bash
+   uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+4. **+ New** → **Database** → **Add PostgreSQL** orqali database qo'shing.
+5. PostgreSQL'ning **Variables** bo'limidan `DATABASE_URL`ni nusxalang.
+6. Web Service'ning **Variables** bo'limiga uchtasini qo'shing: `DATABASE_URL`, `BOT_TOKEN`, `SECRET_KEY`.
+7. **Settings** → **Networking** → **Generate Domain** orqali ochiq manzil oling.
+
+Kod database turidan mustaqil yozilgani uchun (SQLAlchemy ORM tufayli), lokal SQLite va production PostgreSQL orasida hech qanday qo'shimcha o'zgarish talab qilinmaydi — faqat `DATABASE_URL` muhit o'zgaruvchisi orqali avtomatik moslashadi.
+
+---
+
+## 📁 Loyiha strukturasi
+PostFlow/
+├── static/                 # Frontend fayllari (HTML, CSS)
+│   ├── login.html
+│   ├── register.html
+│   ├── dashboard.html
+│   ├── profile.html
+│   ├── founder.html
+│   └── style.css
+├── main.py                 # FastAPI ilovasi — barcha API endpoint'lar
+├── database.py             # Database ulanishi (SQLite/PostgreSQL)
+├── models.py                # Database jadvallari (User, Channel, Post)
+├── schemas.py                # Pydantic validatsiya sxemalari
+├── auth.py                   # Parol hash, JWT autentifikatsiya
+├── requirements.txt          # Kerakli kutubxonalar ro'yxati
+├── .gitignore                 # .env, venv, app.db Git'ga yuklanmaydi
+└── README.md
+
+---
+
+## 📖 Foydalanish qo'llanmasi
+
+1. **Ro'yxatdan o'ting** — ism, email, username, parol bilan.
+2. **Botni kanalingizga admin qiling.**
+3. **Login qiling**, Dashboard'da kanal username'ini kiritib **"Kanalni ulash"** bosing.
+4. **Post yozing** — kerak bo'lsa Markdown bilan formatlashtiring (`**qalin**`, `*qiya*`, `` `kod` ``).
+5. Qaysi kanalga yuborilishini tanlang, **Publish 🚀** bosing.
+6. **Profil** bo'limida statistikangizni kuzating.
+
+---
+
+<p align="center">Made with ❤️ by Faxriddin</p>
+
+
 ### 1. Ro'yxatdan o'tish
 
 Login sahifasidagi **"Ro'yxatdan o'tish"** linkini bosing, ism, email, username va parolni kiriting.
