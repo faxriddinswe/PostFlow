@@ -121,8 +121,8 @@ Kod database turidan mustaqil yozilgani uchun (SQLAlchemy ORM tufayli), lokal SQ
 ---
 
 ## 📁 Loyiha strukturasi
-PostFlow/
-├──static/                 
+PostFlow
+├── static/                 
 │   ├── login.html
 │   ├── register.html
 │   ├── dashboard.html
