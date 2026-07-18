@@ -170,13 +170,15 @@ Username va parol bilan login qiling. Dashboard'da **"Telegram kanalni ulash"** 
 
 "Post yozish" bo'limida matningizni yozing. Kerak bo'lsa, toolbar tugmalari yordamida formatlashtiring:
 
-| Tugma | Natija | Misol |
-|---|---|---|
+## Matn formatlash ko'rsatmalari
+
+| Tugma | Natija | Misol (Yozilishi → Natijasi) |
+| :---: | --- | --- |
 | **B** | Qalin matn | `**muhim**` → **muhim** |
-| *I* | Qiya matn | `*eslatma*` → _eslatma_ |
-| `{ }` | Inline kod | `` `kod` `` → `kod` |
-| `{ ;;; }` | Kod bloki | ` ```kod bloki``` ` |
-| ❝❞ | Iqtibos | `> aytilgan gap` |
+| *I* | Qiya matn | `*eslatma*` → *eslatma* |
+| `{ }` | Inline kod | `` `main.py` `` → `main.py` |
+| `{ ;;; }` | Kod bloki | Tepadagi loyiha strukturasi kabi uchta \`\`\` ichidagi blok |
+| ❝❞ | Iqtibos (Blockquote) | `> Bu muhim eslatma` → > Bu muhim eslatma |
 
 **Publish 🚀** tugmasini bosing — post darhol ulangan Telegram kanalingizga yuboriladi.
 
