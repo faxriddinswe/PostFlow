@@ -110,6 +110,3 @@ Konvertatsiya `main.py` ichidagi `markdown_to_telegram_html()` funksiyasida rege
 
 Ushbu loyiha — FastAPI, autentifikatsiya, database dizayni va xavfsizlik tamoyillarini amaliyotda chuqur o'rganish maqsadida, nol darajadan qadamma-qadam qurilgan.
 
----
-
-<p align="center">Made with ❤️ and a lot of debugging.</p>
