@@ -141,7 +141,7 @@ PostFlow
 ├── .gitignore
 └── README.md
 ---
-
+```
 ## 📖 Foydalanish qo'llanmasi
 
 1. **Ro'yxatdan o'ting** — ism, email, username, parol bilan.
