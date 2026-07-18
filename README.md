@@ -1,7 +1,7 @@
 
 ## 📖 Foydalanish qo'llanmasi
 
-Sayt manzili: https://postflow-6brl.onrender.com/
+Sayt manzili: https://postflow-faxriddinswe-3378.up.railway.app/dashboard
 
 ### 1. Ro'yxatdan o'tish
 
