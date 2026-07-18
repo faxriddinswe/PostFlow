@@ -122,20 +122,20 @@ Kod database turidan mustaqil yozilgani uchun (SQLAlchemy ORM tufayli), lokal SQ
 
 ## 📁 Loyiha strukturasi
 PostFlow/
-├── static/                 # Frontend fayllari (HTML, CSS)
+├── static/                 
 │   ├── login.html
 │   ├── register.html
 │   ├── dashboard.html
 │   ├── profile.html
 │   ├── founder.html
 │   └── style.css
-├── main.py                 # FastAPI ilovasi — barcha API endpoint'lar
-├── database.py             # Database ulanishi (SQLite/PostgreSQL)
-├── models.py               # Database jadvallari (User, Channel, Post)
-├── schemas.py              # Pydantic validatsiya sxemalari
-├── auth.py                 # Parol hash, JWT autentifikatsiya
-├── requirements.txt        # Kerakli kutubxonalar ro'yxati
-├── .gitignore              # .env, venv, app.db Git'ga yuklanmaydi
+├── main.py                 
+├── database.py             
+├── models.py               
+├── schemas.py              
+├── auth.py                 
+├── requirements.txt        
+├── .gitignore             
 └── README.md
 
 ---
