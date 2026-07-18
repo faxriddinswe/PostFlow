@@ -131,11 +131,11 @@ PostFlow/
 │   └── style.css
 ├── main.py                 # FastAPI ilovasi — barcha API endpoint'lar
 ├── database.py             # Database ulanishi (SQLite/PostgreSQL)
-├── models.py                # Database jadvallari (User, Channel, Post)
-├── schemas.py                # Pydantic validatsiya sxemalari
-├── auth.py                   # Parol hash, JWT autentifikatsiya
-├── requirements.txt          # Kerakli kutubxonalar ro'yxati
-├── .gitignore                 # .env, venv, app.db Git'ga yuklanmaydi
+├── models.py               # Database jadvallari (User, Channel, Post)
+├── schemas.py              # Pydantic validatsiya sxemalari
+├── auth.py                 # Parol hash, JWT autentifikatsiya
+├── requirements.txt        # Kerakli kutubxonalar ro'yxati
+├── .gitignore              # .env, venv, app.db Git'ga yuklanmaydi
 └── README.md
 
 ---
