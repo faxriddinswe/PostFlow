@@ -1,7 +1,7 @@
 
 ## 📖 Foydalanish qo'llanmasi
 
-Sayt manzili: https://postflow-faxriddinswe-3378.up.railway.app/dashboard
+Sayt manzili: https://postflow-faxriddinswe-3378.up.railway.app/login-page
 
 ### 1. Ro'yxatdan o'tish
 
