@@ -39,8 +39,8 @@ Navbardagi **Profil** bo'limida jami yuborilgan postlar soni, faol kunlar soni v
 
 | Method | Endpoint | Himoyalanganmi | Vazifasi |
 |---|---|:---:|---|
-| `POST` | `/register` | ❌ | Yangi foydalanuvchi ro'yxatdan o'tkazish |
-| `POST` | `/login` | ❌ | Login qilish, JWT token olish |
+| `POST` | `/register` | ✅  | Yangi foydalanuvchi ro'yxatdan o'tkazish |
+| `POST` | `/login` | ✅  | Login qilish, JWT token olish |
 | `POST` | `/channels/connect` | ✅ | Telegram kanalni ulash |
 | `POST` | `/publish` | ✅ | Post yozish va Telegram kanalga yuborish |
 | `GET` | `/profile/data` | ✅ | Foydalanuvchi statistikasi va faollik tarixi |
