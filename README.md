@@ -152,7 +152,6 @@ PostFlow
 
 ---
 
-<p align="center">Made with ❤️ by Faxriddin</p>
 
 
 ### 1. Ro'yxatdan o'tish
