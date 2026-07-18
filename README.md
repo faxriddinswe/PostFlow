@@ -177,7 +177,7 @@ Username va parol bilan login qiling. Dashboard'da **"Telegram kanalni ulash"** 
 | **B** | Qalin matn | `**muhim**` → **muhim** |
 | *I* | Qiya matn | `*eslatma*` → *eslatma* |
 | `{ }` | Inline kod | `` `main.py` `` → `main.py` |
-| `{ ;;; }` | Kod bloki | Tepadagi loyiha strukturasi kabi uchta \`\`\` ichidagi blok |
+| `{ ;;; }` | Kod bloki | kod yozish|
 | ❝❞ | Iqtibos (Blockquote) | `> Bu muhim eslatma` → > Bu muhim eslatma |
 
 **Publish 🚀** tugmasini bosing — post darhol ulangan Telegram kanalingizga yuboriladi.
