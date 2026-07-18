@@ -121,7 +121,6 @@ Kod database turidan mustaqil yozilgani uchun (SQLAlchemy ORM tufayli), lokal SQ
 ---
 
 ## 📁 Loyiha strukturasi
-## Project Structure
 
 ```text
 PostFlow
@@ -140,7 +139,7 @@ PostFlow
 ├── requirements.txt
 ├── .gitignore
 └── README.md
----
+
 ```
 ## 📖 Foydalanish qo'llanmasi
 
