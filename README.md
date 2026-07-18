@@ -121,23 +121,25 @@ Kod database turidan mustaqil yozilgani uchun (SQLAlchemy ORM tufayli), lokal SQ
 ---
 
 ## 📁 Loyiha strukturasi
+## Project Structure
+
+```text
 PostFlow
-├── static/                 
+├── static/
 │   ├── login.html
 │   ├── register.html
 │   ├── dashboard.html
 │   ├── profile.html
 │   ├── founder.html
 │   └── style.css
-├── main.py                 
-├── database.py             
-├── models.py               
-├── schemas.py              
-├── auth.py                 
-├── requirements.txt        
-├── .gitignore             
+├── main.py
+├── database.py
+├── models.py
+├── schemas.py
+├── auth.py
+├── requirements.txt
+├── .gitignore
 └── README.md
-
 ---
 
 ## 📖 Foydalanish qo'llanmasi
