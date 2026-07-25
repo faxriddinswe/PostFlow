@@ -48,16 +48,22 @@
             <select id="channelSelect"></select>
 
             <div class="editor-toolbar">
-                <button type="button" class="tool-btn" onclick="wrapSelection('**','**')"
-                    title="Qalin"><b>B</b></button>
-                <button type="button" class="tool-btn" onclick="wrapSelection('*','*')" title="Qiya"><i>I</i></button>
-                <button type="button" class="tool-btn" onclick="wrapSelection('`','`')" title="Kod">{ }</button>
-                <button type="button" class="tool-btn" onclick="wrapSelection('```','```')" title="Kod bloki">{ ;;;
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()"
+                    onclick="wrapSelection('**','**')" title="Qalin"><b>B</b></button>
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()"
+                    onclick="wrapSelection('*','*')" title="Qiya"><i>I</i></button>
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()"
+                    onclick="wrapSelection('`','`')" title="Kod">{ }</button>
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()"
+                    onclick="wrapSelection('```','```')" title="Kod bloki">{ ;;;
                     }</button>
-                <button type="button" class="tool-btn" onclick="insertQuote()" title="Iqtibos">❝ ❞</button>
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()" onclick="insertQuote()"
+                    title="Iqtibos">❝ ❞</button>
+                <button type="button" class="tool-btn" onmousedown="event.preventDefault()" onclick="insertBulletList()"
+                    title="Ro'yxat">☰</button>
             </div>
             <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">
-                **qalin**, *qiya*, `kod`, ```kod bloki```, &gt; iqtibos
+                **qalin**, *qiya*, `kod`, ```kod bloki```, &gt; iqtibos, - ro'yxat
             </div>
             <br>
             <textarea id="editor" placeholder="Postingizni shu yerga yozing..."></textarea>
@@ -111,6 +117,40 @@
             textarea.value =
                 textarea.value.substring(0, start) +
                 "> " + selected +
+                textarea.value.substring(end);
+
+            textarea.focus();
+        }
+
+
+        function insertQuote() {
+            const textarea = document.getElementById("editor");
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selected = textarea.value.substring(start, end) || "iqtibos matni";
+
+            textarea.value =
+                textarea.value.substring(0, start) +
+                "> " + selected +
+                textarea.value.substring(end);
+
+            textarea.focus();
+        }
+
+        // Ro'yxat (bullet list) -- tanlangan har bir qator boshiga "- " qo'shadi
+        function insertBulletList() {
+            const textarea = document.getElementById("editor");
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selected = textarea.value.substring(start, end) || "ro'yxat elementi";
+
+            // Bir nechta qator belgilangan bo'lsa, har biriga alohida "- " qo'shamiz
+            const lines = selected.split("\n");
+            const bulletedLines = lines.map((line) => "- " + line).join("\n");
+
+            textarea.value =
+                textarea.value.substring(0, start) +
+                bulletedLines +
                 textarea.value.substring(end);
 
             textarea.focus();

@@ -41,40 +41,27 @@ app = FastAPI()  # bizning web-dasturimiz
 
 
 def markdown_to_telegram_html(text: str) -> str:
-    """
-    Foydalanuvchi yozgan oddiy Markdown belgilarini Telegram HTML formatiga o'giradi.
-    Tartib muhim: avval kod bloklari, keyin qalin/qiya, oxirida iqtibos.
-    """
-    # 1. Avval xavfli HTML belgilarni "xavfsiz" qilib olamiz (escaping)
-    #    Bu -- foydalanuvchi tasodifan < yoki > yozib qo'ysa, Telegram xato bermasligi uchun
     text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-    # 2. Kod bloki: ```matn``` -> <pre>matn</pre>
-    #    re.DOTALL -- "." belgisi yangi qatorni ham qamrab olishini ta'minlaydi
     text = re.sub(r"```(.+?)```", r"<pre>\1</pre>", text, flags=re.DOTALL)
-
-    # 3. Qalin: **matn** -> <b>matn</b>
     text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
-
-    # 4. Qiya: *matn* -> <i>matn</i>
-    #    Diqqat: bu qadam qalin (**) dan KEYIN bo'lishi shart, aks holda **qalin**ni buzib qo'yadi
     text = re.sub(r"\*(.+?)\*", r"<i>\1</i>", text)
-
-    # 5. Inline kod: `matn` -> <code>matn</code>
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
 
-    # 6. Iqtibos: qator boshida "> " bilan boshlangan har bir qatorni topamiz
+    # Har bir qatorni alohida tekshiramiz: iqtibos ("> ") va ro'yxat ("- ") belgilari uchun
     lines = text.split("\n")
     new_lines = []
     for line in lines:
-        if line.startswith("&gt; "):  # chunki > allaqachon &gt;ga aylangan (1-qadamda)
+        if line.startswith("&gt; "):
             new_lines.append(f"<blockquote>{line[5:]}</blockquote>")
+        elif line.startswith("- "):
+            # "- matn" -> "• matn" (Telegram HTML'da <ul>/<li> yo'q, shuning uchun belgi ishlatamiz)
+            new_lines.append(f"• {line[2:]}")
         else:
             new_lines.append(line)
     text = "\n".join(new_lines)
 
     return text
-
 
 async def check_bot_is_admin(channel_username: str) -> bool:
     """
