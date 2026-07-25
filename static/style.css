@@ -102,7 +102,7 @@ textarea:focus {
 
 textarea {
     resize: vertical;
-    min-height: 400px;
+    min-height: 401px;
     line-height: 1.6;
 }
 
